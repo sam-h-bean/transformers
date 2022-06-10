@@ -13,8 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """ Salesforce CTRL configuration"""
+from collections import OrderedDict
+from typing import Mapping, List
 
 from ...configuration_utils import PretrainedConfig
+from ...onnx import OnnxConfig, PatchingSpec, OnnxConfigWithPast
 from ...utils import logging
 
 
@@ -127,3 +130,30 @@ class CTRLConfig(PretrainedConfig):
         self.use_cache = use_cache
 
         super().__init__(**kwargs)
+
+
+class CTRLOnnxConfig(OnnxConfigt):
+    def __init__(
+        self,
+        config: PretrainedConfig,
+        task: str = "default",
+        patching_specs: List[PatchingSpec] = None,
+    ):
+        super().__init__(config, task=task, patching_specs=patching_specs)
+        if not getattr(self._config, "pad_token_id", None):
+            # TODO: how to do that better?
+            self._config.pad_token_id = 0
+
+    @property
+    def inputs(self) -> Mapping[str, Mapping[int, str]]:
+        if self.task == "multiple-choice":
+            dynamic_axis = {0: "batch", 1: "choice", 2: "sequence"}
+        else:
+            dynamic_axis = {0: "batch", 1: "sequence"}
+        return OrderedDict(
+            [
+                ("input_ids", dynamic_axis),
+                ("attention_mask", dynamic_axis),
+                ("pad_token_id", -1)
+            ]
+        )

@@ -22,7 +22,7 @@ from ...utils import OptionalDependencyNotAvailable, _LazyModule, is_tf_availabl
 
 
 _import_structure = {
-    "configuration_ctrl": ["CTRL_PRETRAINED_CONFIG_ARCHIVE_MAP", "CTRLConfig"],
+    "configuration_ctrl": ["CTRL_PRETRAINED_CONFIG_ARCHIVE_MAP", "CTRLConfig", "CTRLOnnxConfig"],
     "tokenization_ctrl": ["CTRLTokenizer"],
 }
 
@@ -56,7 +56,7 @@ else:
 
 
 if TYPE_CHECKING:
-    from .configuration_ctrl import CTRL_PRETRAINED_CONFIG_ARCHIVE_MAP, CTRLConfig
+    from .configuration_ctrl import CTRL_PRETRAINED_CONFIG_ARCHIVE_MAP, CTRLConfig, CTRLOnnxConfig
     from .tokenization_ctrl import CTRLTokenizer
 
     try:

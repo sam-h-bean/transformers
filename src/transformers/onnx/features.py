@@ -193,6 +193,7 @@ class FeaturesManager:
             "question-answering",
             onnx_config_cls="models.convbert.ConvBertOnnxConfig",
         ),
+        "ctrl": supported_features_mapping("sequence-classification", onnx_config_cls="models.ctrl.CTRLOnnxConfig"),
         "data2vec-text": supported_features_mapping(
             "default",
             "masked-lm",
